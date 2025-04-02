@@ -16,7 +16,7 @@ builder.Services.AddOpenAIChatCompletion(
 
 var kernel = builder.Build();
 
-//await kernel.Plugins.AddToolsFromClaudeDesktopConfigAsync(cancellationToken: cts.Token);
+await kernel.Plugins.AddToolsFromClaudeDesktopConfigAsync(cancellationToken: cts.Token);
 
 //var everyThingTransportOptions = new Dictionary<string, string>
 //{
@@ -87,9 +87,9 @@ var executionSettings = new OpenAIPromptExecutionSettings
 var result = await kernel.InvokePromptAsync("Which tools are currently registered?", new(executionSettings)).ConfigureAwait(false);
 Console.WriteLine($"\n\nTools:\n{result}");
 
-//var promptReadFile = "Read the file 'CV.docx' and return all text and format as markdown.";
-//var resultReadFile = await kernel.InvokePromptAsync(promptReadFile, new(executionSettings)).ConfigureAwait(false);
-//Console.WriteLine($"\n\n{promptReadFile}\n{resultReadFile}");
+var promptReadFile = "Read the file 'CV.docx' and return all text and format as markdown.";
+var resultReadFile = await kernel.InvokePromptAsync(promptReadFile, new(executionSettings)).ConfigureAwait(false);
+Console.WriteLine($"\n\n{promptReadFile}\n{resultReadFile}");
 
 //var prompt1 = "Please call the echo tool with the string 'Hello Stef!' and give me the response as-is.";
 //var result1 = await kernel.InvokePromptAsync(prompt1, new(executionSettings)).ConfigureAwait(false);
@@ -99,10 +99,9 @@ Console.WriteLine($"\n\nTools:\n{result}");
 //var result2 = await kernel.InvokePromptAsync(prompt2, new(executionSettings)).ConfigureAwait(false);
 //Console.WriteLine($"\n\n{prompt2}\n{result2}");
 
-//var promptAzureDevops = "get the 3 latest projects in azure devops";
-var promptAzureDevops = "Get 5 commits from Azure DevOps for repository 'mstack-skills'";
-var resultAzureDevops = await kernel.InvokePromptAsync(promptAzureDevops, new(executionSettings)).ConfigureAwait(false);
-Console.WriteLine($"\n\n{promptAzureDevops}\n{resultAzureDevops}");
+var promptAzureDevops1 = "Get 3 commits from Azure DevOps for repository 'mstack-skills', for each commit get all details.";
+var resultAzureDevops1 = await kernel.InvokePromptAsync(promptAzureDevops1, new(executionSettings)).ConfigureAwait(false);
+Console.WriteLine($"\n\n{promptAzureDevops1}\n{resultAzureDevops1}");
 
 await cts.CancelAsync().ConfigureAwait(false);
 cts.Dispose();

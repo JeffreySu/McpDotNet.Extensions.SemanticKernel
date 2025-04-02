@@ -16,8 +16,7 @@ builder.Services.AddOpenAIChatCompletion(
 
 var kernel = builder.Build();
 
-
-await kernel.Plugins.AddToolsFromClaudeDesktopConfigAsync(cancellationToken: cts.Token);
+//await kernel.Plugins.AddToolsFromClaudeDesktopConfigAsync(cancellationToken: cts.Token);
 
 //var everyThingTransportOptions = new Dictionary<string, string>
 //{
@@ -58,6 +57,19 @@ await kernel.Plugins.AddMcpFunctionsFromStdioServerAsync("GitHub", githubTranspo
 //};
 //await kernel.Plugins.AddMcpFunctionsFromStdioServerAsync("AzureDevOps2", azureDevOpsTransportOptions, cancellationToken: cts.Token);
 
+var azureDevOpsTransportOptions = new Dictionary<string, string>
+{
+    ["command"] = "dotnet run --project",
+    ["arguments"] = "C:\\dev\\GitHub\\mcpserver.azuredevops\\src\\mcpserver.azuredevops.stdio\\mcpserver.azuredevops.stdio.csproj",
+    ["env:AZURE_DEVOPS_ORG_URL"] = "https://dev.azure.com/mstack",
+    ["env:AZURE_DEVOPS_AUTH_METHOD"] = "pat",
+    ["env:AZURE_DEVOPS_PAT"] = Environment.GetEnvironmentVariable("MCP_PAT")!,
+    ["env:AZURE_DEVOPS_DEFAULT_PROJECT"] = "AzureExampleProjects"
+};
+await kernel.Plugins.AddMcpFunctionsFromStdioServerAsync("AzureDevOpsStef", azureDevOpsTransportOptions, cancellationToken: cts.Token);
+
+//dotnet run --project C:\\dev\\GitHub\\mcpserver.azuredevops\\src\\mcpserver.azuredevops.stdio\\mcpserver.azuredevops.stdio.csproj\" env:AZURE_DEVOPS_ORG_URL=https://dev.azure.com/mstack env:AZURE_DEVOPS_PAT=Bu2aQnaiRGdSGMGDBhAR9qBPeDXvCJo87QhIicNOIL80xs7ZvuJoJQQJ99BCACAAAAAo759gAAASAZDO1CXQ"
+
 //var openXmlTransportOptions = new Dictionary<string, string>
 //{
 //    //["command"] = @"C:\dev\GitHub\McpDotNet.Extensions.SemanticKernel\wip\ModelContextProtocolServer.OpenXml.Stdio\bin\Release\net8.0\ModelContextProtocolServer.OpenXml.Stdio.exe",
@@ -75,9 +87,9 @@ var executionSettings = new OpenAIPromptExecutionSettings
 var result = await kernel.InvokePromptAsync("Which tools are currently registered?", new(executionSettings)).ConfigureAwait(false);
 Console.WriteLine($"\n\nTools:\n{result}");
 
-var promptReadFile = "Read the file 'CV.docx' and return all text and format as markdown.";
-var resultReadFile = await kernel.InvokePromptAsync(promptReadFile, new(executionSettings)).ConfigureAwait(false);
-Console.WriteLine($"\n\n{promptReadFile}\n{resultReadFile}");
+//var promptReadFile = "Read the file 'CV.docx' and return all text and format as markdown.";
+//var resultReadFile = await kernel.InvokePromptAsync(promptReadFile, new(executionSettings)).ConfigureAwait(false);
+//Console.WriteLine($"\n\n{promptReadFile}\n{resultReadFile}");
 
 //var prompt1 = "Please call the echo tool with the string 'Hello Stef!' and give me the response as-is.";
 //var result1 = await kernel.InvokePromptAsync(prompt1, new(executionSettings)).ConfigureAwait(false);
@@ -87,7 +99,8 @@ Console.WriteLine($"\n\n{promptReadFile}\n{resultReadFile}");
 //var result2 = await kernel.InvokePromptAsync(prompt2, new(executionSettings)).ConfigureAwait(false);
 //Console.WriteLine($"\n\n{prompt2}\n{result2}");
 
-var promptAzureDevops = "get the 3 latest projects in azure devops";
+//var promptAzureDevops = "get the 3 latest projects in azure devops";
+var promptAzureDevops = "Get 5 commits from Azure DevOps for repository 'mstack-skills'";
 var resultAzureDevops = await kernel.InvokePromptAsync(promptAzureDevops, new(executionSettings)).ConfigureAwait(false);
 Console.WriteLine($"\n\n{promptAzureDevops}\n{resultAzureDevops}");
 

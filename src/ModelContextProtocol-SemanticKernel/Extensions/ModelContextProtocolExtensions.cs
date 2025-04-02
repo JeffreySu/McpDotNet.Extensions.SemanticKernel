@@ -113,7 +113,7 @@ internal static class ModelContextProtocolExtensions
 
     private static List<KernelParameterMetadata>? ToParameters(this McpClientTool tool)
     {
-        var inputSchema = JsonSerializer.Deserialize<JsonSchema>(tool.JsonSchema.GetRawText());
+        var inputSchema = tool.JsonSchema.Deserialize<JsonSchema>();
         var properties = inputSchema?.Properties;
         if (properties == null)
         {
